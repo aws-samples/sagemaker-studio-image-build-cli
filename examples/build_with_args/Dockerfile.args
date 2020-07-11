@@ -1,0 +1,4 @@
+ARG BASE_IMAGE=need_an_image
+FROM $BASE_IMAGE
+
+RUN pip install boto3
