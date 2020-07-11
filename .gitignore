@@ -1,0 +1,13 @@
+__pycache__
+output/**
+dist/**
+.ipynb_checkpoints
+*.egg-info
+*.bundle.*
+lib/
+*.tgz
+MANIFEST
+manual_dist/**
+/build
+.idea/
+.vscode/
