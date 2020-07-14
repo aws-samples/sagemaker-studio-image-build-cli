@@ -37,11 +37,12 @@ def get_role(args):
         import sagemaker
 
         logging.basicConfig(level=logging.INFO)
-
-        return sagemaker.get_execution_role().split("/")[-1]
+        # arn:aws:iam::$account_id:role/$path/$name -> $path/$name
+        return "/".join(sagemaker.get_execution_role().split(":")[-1].split("/")[1:])
     except ValueError as e:
         raise ValueError(
-            "Unable to determine execution role. Please provide via --role", e
+            "Unable to determine execution role. Please provide via the --role argument",
+            e,
         )
 
 
