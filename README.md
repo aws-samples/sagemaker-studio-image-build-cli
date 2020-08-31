@@ -32,7 +32,7 @@ The CLI will take care of packaging the current directory and uploading to S3, c
 
 Install the CLI using pip.
 ```bash
-pip install sagemaker_studio_image_build
+pip install sagemaker-studio-image-build
 ```
 
 Ensure the execution role has a trust policy with CodeBuild.
