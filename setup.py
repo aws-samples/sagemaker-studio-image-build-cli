@@ -3,11 +3,11 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-required_packages = ["boto3>=1.10.44, < 2.0", "sagemaker < 2.0"]
+required_packages = ["boto3>=1.10.44, < 2.0", "sagemaker < 3.0"]
 
 setuptools.setup(
     name="sagemaker_studio_image_build",
-    version="0.3.1",
+    version="0.4.0",
     author="Amazon Web Services",
     description="Build Docker Images in Amazon SageMaker Studio using AWS CodeBuild",
     long_description=long_description,
@@ -20,7 +20,6 @@ setuptools.setup(
         "Intended Audience :: Science/Research",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],

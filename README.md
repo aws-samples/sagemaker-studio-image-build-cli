@@ -184,7 +184,7 @@ From a "System Terminal" in SageMaker Studio
 ```bash
 export DEV_S3_PATH_PREFIX=s3://path/to/location
 aws s3 sync ${DEV_S3_PATH_PREFIX}/sagemaker-docker-build/dist . 
-pip install sagemaker-docker-build-x.y.tar.gz
+pip install sagemaker_studio_image_build-x.y.z.tar.gz
 ```
 
 ## Security
