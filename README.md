@@ -1,5 +1,8 @@
 ## SageMaker Docker Build
 
+[![Version](https://img.shields.io/pypi/v/sagemaker-studio-image-build.svg)](https://pypi.org/project/sagemaker-studio-image-build/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 This is a CLI for building Docker images in SageMaker Studio using AWS CodeBuild.  
 
 ### Usage
