@@ -8,6 +8,7 @@ phases:
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 763104351884)
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 217643126080)
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 727897471807)
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 626614931356)
   build:
     commands:
       - echo Build started on `date`
