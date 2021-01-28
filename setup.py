@@ -7,7 +7,7 @@ required_packages = ["boto3>=1.10.44, < 2.0", "sagemaker < 3.0"]
 
 setuptools.setup(
     name="sagemaker_studio_image_build",
-    version="0.4.0",
+    version="0.5.0",
     author="Amazon Web Services",
     description="Build Docker Images in Amazon SageMaker Studio using AWS CodeBuild",
     long_description=long_description,
