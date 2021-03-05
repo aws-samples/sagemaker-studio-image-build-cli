@@ -11,13 +11,14 @@ from sagemaker_studio_image_build.logs import logs_for_build
 
 
 class TempCodeBuildProject:
-    def __init__(self, s3_location, role, repository=None):
+    def __init__(self, s3_location, role, repository=None, compute_type=None):
         self.s3_location = s3_location
         self.role = role
 
         self.session = boto3.session.Session()
         self.domain_id, self.user_profile_name = self._get_studio_metadata()
         self.repo_name = None
+        self.compute_type = compute_type or 'BUILD_GENERAL1_SMALL'
 
         if repository:
             self.repo_name, self.tag = repository.split(":", maxsplit=1)
@@ -62,7 +63,7 @@ class TempCodeBuildProject:
             "environment": {
                 "type": "LINUX_CONTAINER",
                 "image": "aws/codebuild/standard:4.0",
-                "computeType": "BUILD_GENERAL1_SMALL",
+                "computeType": self.compute_type,
                 "environmentVariables": [
                     {"name": "AWS_DEFAULT_REGION", "value": region},
                     {"name": "AWS_ACCOUNT_ID", "value": account},
