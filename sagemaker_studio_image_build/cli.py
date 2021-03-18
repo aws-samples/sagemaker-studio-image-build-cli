@@ -25,14 +25,6 @@ def validate_args(args, extra_args):
                     f"The value of the -f/file argument [{file_value}] is outside the working directory [{os.getcwd()}]"
                 )
 
-    # Validate arg compute_type
-    if args.compute_type:
-        if not args.compute_type in ['BUILD_GENERAL1_SMALL', 'BUILD_GENERAL1_MEDIUM',
-        'BUILD_GENERAL1_LARGE', 'BUILD_GENERAL1_LARGE', 'BUILD_GENERAL1_LARGE', 'BUILD_GENERAL1_2XLARGE']:
-            raise ValueError(
-                f'Error parsing reference: "{args.repository}" is not a valid repository/tag'
-            )
-
 
 def get_role(args):
     if args.role:
@@ -79,12 +71,10 @@ def main():
         help="The ECR repository:tag for the image (default: sagemaker-studio-${domain_id}:latest)",
     )
     build_parser.add_argument(
-        "--image",
-        help="The ECR repository:tag for the image (default: sagemaker-studio-${domain_id}:latest)",
-    )
-    build_parser.add_argument(
         "--compute-type",
-        help="The code build compute type (default: BUILD_GENERAL1_SMALL)",
+        help="The CodeBuild compute type (default: BUILD_GENERAL1_SMALL)",
+        choices=["BUILD_GENERAL1_SMALL", "BUILD_GENERAL1_MEDIUM",
+                 "BUILD_GENERAL1_LARGE", "BUILD_GENERAL1_2XLARGE"]
         default="BUILD_GENERAL1_SMALL"
     )
     build_parser.add_argument(

@@ -18,7 +18,7 @@ class TempCodeBuildProject:
         self.session = boto3.session.Session()
         self.domain_id, self.user_profile_name = self._get_studio_metadata()
         self.repo_name = None
-        self.compute_type = compute_type or 'BUILD_GENERAL1_SMALL'
+        self.compute_type = compute_type or "BUILD_GENERAL1_SMALL"
 
         if repository:
             self.repo_name, self.tag = repository.split(":", maxsplit=1)
