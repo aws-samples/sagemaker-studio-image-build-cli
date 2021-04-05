@@ -64,12 +64,16 @@ def delete_zip_file(bucket, key):
     s3.delete_object(Bucket=bucket, Key=key)
 
 
-def build_image(repository, role, bucket, compute_type, extra_args, log=True):
+def build_image(repository, role, bucket, compute_type, environment, extra_args, log=True):
     bucket, key = upload_zip_file(repository, bucket, " ".join(extra_args))
     try:
         from sagemaker_studio_image_build.codebuild import TempCodeBuildProject
 
-        with TempCodeBuildProject(f"{bucket}/{key}", role, repository=repository, compute_type=compute_type) as p:
+        with TempCodeBuildProject(f"{bucket}/{key}", 
+                                  role, 
+                                  repository=repository, 
+                                  compute_type=compute_type,
+                                  environment=environment) as p:
             p.build(log)
     finally:
         delete_zip_file(bucket, key)

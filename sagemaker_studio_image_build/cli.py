@@ -50,7 +50,7 @@ def build_image(args, extra_args):
     validate_args(args, extra_args)
 
     builder.build_image(
-        args.repository, get_role(args), args.bucket, args.compute_type, extra_args, log=not args.no_logs
+        args.repository, get_role(args), args.bucket, args.compute_type, args.environment, extra_args, log=not args.no_logs
     )
 
 
@@ -72,10 +72,16 @@ def main():
     )
     build_parser.add_argument(
         "--compute-type",
-        help="The CodeBuild compute type (default: BUILD_GENERAL1_SMALL)",
+        help="The CodeBuild compute type (default: BUILD_GENERAL1_SMALL for CPU, BUILD_GENERAL1_LARGE for GPU)",
         choices=["BUILD_GENERAL1_SMALL", "BUILD_GENERAL1_MEDIUM",
-                 "BUILD_GENERAL1_LARGE", "BUILD_GENERAL1_2XLARGE"]
+                 "BUILD_GENERAL1_LARGE", "BUILD_GENERAL1_2XLARGE"],
         default="BUILD_GENERAL1_SMALL"
+    )
+    build_parser.add_argument(
+        "--environment",
+        help="The CodeBuild environment (default: LINUX_CONTAINER)",
+        choices=["LINUX_CONTAINER", "LINUX_GPU_CONTAINER"],
+        default="LINUX_CONTAINER"
     )
     build_parser.add_argument(
         "--role",
