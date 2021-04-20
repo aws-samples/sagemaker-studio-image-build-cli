@@ -9,6 +9,64 @@ phases:
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 217643126080)
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 727897471807)
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 626614931356)
+      # Since a lot of accounts are listed under the following, we'll only log in to the one(s) for our region:
+      # https://docs.aws.amazon.com/sagemaker/latest/dg/pre-built-docker-containers-scikit-learn-spark.html
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "us-west-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 746614075791)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "us-west-2" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 246618743249)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "us-east-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 683313688378)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "us-east-2" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 257758044811)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "ap-northeast-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 354813040037)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "ap-northeast-2" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 366743142698)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "ap-southeast-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 121021644041)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "ap-southeast-2" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 783357654285)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "ap-south-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 720646828776)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "eu-west-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 141502667606)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "eu-west-2" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 764974769150)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "eu-central-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 492215442770)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "ca-central-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 341280168497)
+        fi
+      - |-
+        if [ "$AWS_DEFAULT_REGION" = "us-gov-west-1" ]; then
+          $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION --registry-ids 414596584902)
+        fi
   build:
     commands:
       - echo Build started on `date`
