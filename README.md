@@ -142,11 +142,6 @@ The following permissions are required in the execution role to execute a build 
         },
         {
             "Effect": "Allow",
-            "Action": "ecr:GetAuthorizationToken",
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
             "Action": [
               "s3:GetObject",
               "s3:DeleteObject",
