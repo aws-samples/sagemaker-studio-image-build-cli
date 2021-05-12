@@ -201,14 +201,6 @@ If you need to run your CodeBuild project within a VPC, please add the following
                 "ec2:DescribeVpcs"
             ],
             "Resource": "*"
-        },
-        {
-            "Sid": 
-            "Effect": "Allow",
-            "Action": [
-                "ec2:CreateNetworkInterfacePermission"
-            ],
-            "Resource": "arn:aws:ec2:*:*:network-interface/*"
         }
 ```
 
