@@ -11,7 +11,7 @@ from sagemaker_studio_image_build.logs import logs_for_build
 
 
 class TempCodeBuildProject:
-    def __init__(self, s3_location, role, repository=None, compute_type=None):
+    def __init__(self, s3_location, role, repository=None, compute_type=None, vpc_config=None):
         self.s3_location = s3_location
         self.role = role
 
@@ -19,6 +19,7 @@ class TempCodeBuildProject:
         self.domain_id, self.user_profile_name = self._get_studio_metadata()
         self.repo_name = None
         self.compute_type = compute_type or "BUILD_GENERAL1_SMALL"
+        self.vpc_config = vpc_config
 
         if repository:
             self.repo_name, self.tag = repository.split(":", maxsplit=1)
@@ -74,6 +75,9 @@ class TempCodeBuildProject:
             },
             "serviceRole": f"arn:{partition}:iam::{account}:role/{self.role}",
         }
+
+        if self.vpc_config is not None:
+            args["vpcConfig"] = self.vpc_config
 
         client.create_project(**args)
         return self

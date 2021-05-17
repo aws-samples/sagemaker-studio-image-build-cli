@@ -11,3 +11,4 @@ manual_dist/**
 /build
 .idea/
 .vscode/
+.DS_Store
