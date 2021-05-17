@@ -25,13 +25,7 @@ By default, the CodeBuild project will not run within a VPC, the image will be p
 These can be overridden with the relevant CLI options.
 
 ```bash
-sm-docker build . --repository mynewrepo:1.0 --role MyRoleName --bucket MyBucketName --vpc-id MyVpcId --subnets MySubnetId1,MySubnetId2 --security-groups MySecurityGroup1,MySecurityGroup2
-``` 
-
-For instance, please see the sample command with additional argument listed below:
-
-```bash
-sm-docker build . --repository mynewrepo:1.0 --role SampleDockerBuildRole --bucket sagemaker-us-east-1-326543455535 --vpc-id vpc-0c70e76ef1c603b94 --subnets subnet-0d984f080338960bb,subnet-0ac3e96808c8092f2 --security-groups sg-0d31b4042f2902cd0
+sm-docker build . --repository mynewrepo:1.0 --role SampleDockerBuildRole --bucket sagemaker-us-east-1-326543455535 --vpc-id vpc-0c70e76ef1c603b94 --subnet-ids subnet-0d984f080338960bb,subnet-0ac3e96808c8092f2 --security-group-ids sg-0d31b4042f2902cd0
 ``` 
 
 The CLI will take care of packaging the current directory and uploading to S3, creating a CodeBuild project, starting a build with the S3 artifacts, tailing the build logs, and uploading the built image to ECR.

@@ -15,8 +15,8 @@ def validate_args(args, extra_args):
                 f'Error parsing reference: "{args.repository}" is not a valid repository/tag'
             )
 
-    vpc_config = [args.vpc_id, args.subnets, args.security_groups]
-    none_arg_count = sum(arg is None for arg in [args.vpc_id, args.subnets, args.security_groups])
+    vpc_config = [args.vpc_id, args.subnet_ids, args.security_group_ids]
+    none_arg_count = sum(arg is None for arg in [args.vpc_id, args.subnet_ids, args.security_group_ids])
 
     if none_arg_count > 0 and none_arg_count < 3:
         raise ValueError(
@@ -61,8 +61,8 @@ def construct_vpc_config(args):
     else:
         vpc_config = {
                         'vpcId': args.vpc_id,
-                        'subnets': args.subnets.split(','),
-                        'securityGroupIds': args.security_groups.split(',')
+                        'subnets': args.subnet_ids.split(','),
+                        'securityGroupIds': args.security_group_ids.split(',')
                         }
         return vpc_config
 
@@ -112,11 +112,11 @@ def main():
         help="The Id of the VPC that will host the CodeBuild Project (such as vpc-05c09f91d48831c8c).",
     )
     build_parser.add_argument(
-        "--subnets",
+        "--subnet-ids",
         help="The comma-separated list of subnet ids for the CodeBuild Project (such as subnet-0b31f1863e9d31a67)",
     )
     build_parser.add_argument(
-        "--security-groups",
+        "--security-group-ids",
         help="The comma-separated list of security group ids for the CodeBuild Project (such as sg-0ce4ec0d0414d2ddc).",
     )
     build_parser.add_argument(
