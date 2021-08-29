@@ -15,6 +15,15 @@ def validate_args(args, extra_args):
                 f'Error parsing reference: "{args.repository}" is not a valid repository/tag'
             )
 
+    vpc_config = [args.vpc_id, args.subnet_ids, args.security_group_ids]
+    none_arg_count = sum(arg is None for arg in [args.vpc_id, args.subnet_ids, args.security_group_ids])
+
+    if none_arg_count > 0 and none_arg_count < 3:
+        raise ValueError(
+            'Invalid input of the VPC configuration. Please either provide all of the VPC arguments or none of them,'\
+            'in which case the CodeBuild Project, by default, will not run within a VPC.'
+        )
+
     # Validate extra_args
     for idx, extra_arg in enumerate(extra_args):
         # Validate that the path to the Dockerfile is within the PWD.
@@ -46,11 +55,24 @@ def get_role(args):
         )
 
 
+def construct_vpc_config(args):
+    if args.vpc_id is None:
+        return None
+    else:
+        vpc_config = {
+                        'vpcId': args.vpc_id,
+                        'subnets': args.subnet_ids.split(','),
+                        'securityGroupIds': args.security_group_ids.split(',')
+                        }
+        return vpc_config
+
+
 def build_image(args, extra_args):
     validate_args(args, extra_args)
 
     builder.build_image(
-        args.repository, get_role(args), args.bucket, args.compute_type, args.environment, extra_args, log=not args.no_logs
+        args.repository, get_role(args), args.bucket, args.compute_type, 
+        construct_vpc_config(args), args.environment, extra_args, log=not args.no_logs
     )
 
 
@@ -90,6 +112,18 @@ def main():
     build_parser.add_argument(
         "--bucket",
         help="The S3 bucket to use for sending data to CodeBuild (if None, use the SageMaker SDK default bucket).",
+    )
+    build_parser.add_argument(
+        "--vpc-id",
+        help="The Id of the VPC that will host the CodeBuild Project (such as vpc-05c09f91d48831c8c).",
+    )
+    build_parser.add_argument(
+        "--subnet-ids",
+        help="The comma-separated list of subnet ids for the CodeBuild Project (such as subnet-0b31f1863e9d31a67)",
+    )
+    build_parser.add_argument(
+        "--security-group-ids",
+        help="The comma-separated list of security group ids for the CodeBuild Project (such as sg-0ce4ec0d0414d2ddc).",
     )
     build_parser.add_argument(
         "--no-logs",

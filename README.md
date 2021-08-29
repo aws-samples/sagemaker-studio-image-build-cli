@@ -20,12 +20,12 @@ Any additional arguments supported with `docker build` are supported
 sm-docker build . --file /path/to/Dockerfile --build-arg foo=bar
 ```
 
-By default, the image will be pushed to a repository `sagemakerstudio` with the tag `latest`, and use the Studio App's execution role and the default SageMaker Python SDK S3 bucket
+By default, the CodeBuild project will not run within a VPC, the image will be pushed to a repository `sagemakerstudio` with the tag `latest`, and use the Studio App's execution role and the default SageMaker Python SDK S3 bucket
 
 These can be overridden with the relevant CLI options.
 
 ```bash
-sm-docker build . --repository mynewrepo:1.0 --role MyRoleName 
+sm-docker build . --repository mynewrepo:1.0 --role SampleDockerBuildRole --bucket sagemaker-us-east-1-326543455535 --vpc-id vpc-0c70e76ef1c603b94 --subnet-ids subnet-0d984f080338960bb,subnet-0ac3e96808c8092f2 --security-group-ids sg-0d31b4042f2902cd0
 ``` 
 
 The CLI will take care of packaging the current directory and uploading to S3, creating a CodeBuild project, starting a build with the S3 artifacts, tailing the build logs, and uploading the built image to ECR.
@@ -101,16 +101,38 @@ The following permissions are required in the execution role to execute a build 
                 "ecr:DescribeRepositories",
                 "ecr:UploadLayerPart",
                 "ecr:ListImages",
-                "ecr:InitiateLayerUpload",
+                "ecr:InitiateLayerUpload", 
                 "ecr:BatchCheckLayerAvailability",
                 "ecr:PutImage"
             ],
             "Resource": "arn:aws:ecr:*:*:repository/sagemaker-studio*"
         },
         {
+            "Sid": "ReadAccessToPrebuiltAwsImages",
             "Effect": "Allow",
-            "Action": "ecr:GetAuthorizationToken",
-            "Resource": "*"
+            "Action": [
+                "ecr:BatchGetImage",
+                "ecr:GetDownloadUrlForLayer"
+            ],
+            "Resource": [
+                "arn:aws:ecr:*:763104351884:repository/*",
+                "arn:aws:ecr:*:217643126080:repository/*",
+                "arn:aws:ecr:*:727897471807:repository/*",
+                "arn:aws:ecr:*:626614931356:repository/*",
+                "arn:aws:ecr:*:683313688378:repository/*",
+                "arn:aws:ecr:*:520713654638:repository/*",
+                "arn:aws:ecr:*:462105765813:repository/*"
+            ]
+        },
+        {
+            "Sid": "EcrAuthorizationTokenRetrieval",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken"
+            ],
+            "Resource": [
+                "*"
+            ]
         },
         {
             "Effect": "Allow",
@@ -149,6 +171,26 @@ The following permissions are required in the execution role to execute a build 
     ]
 }
 
+```
+
+If you need to run your CodeBuild project within a VPC, please add the following actions to your execution role that the CodeBuild Project will assume:
+
+```json
+        {
+            "Sid": "VpcAccessActions",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateNetworkInterfacePermission",
+                "ec2:DescribeDhcpOptions",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeVpcs"
+            ],
+            "Resource": "*"
+        }
 ```
 
 ### Development

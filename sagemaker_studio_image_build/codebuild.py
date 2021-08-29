@@ -11,7 +11,7 @@ from sagemaker_studio_image_build.logs import logs_for_build
 
 
 class TempCodeBuildProject:
-    def __init__(self, s3_location, role, repository=None, compute_type=None, environment=None):
+    def __init__(self, s3_location, role, repository=None, compute_type=None, vpc_config=None, environment=None):
         self.s3_location = s3_location
         self.role = role
 
@@ -23,6 +23,7 @@ class TempCodeBuildProject:
         if self.environment=="LINUX_GPU_CONTAINER":
             assert self.compute_type=="BUILD_GENERAL1_LARGE", \
                 "LINUX_GPU_CONTAINER builds only available on BUILD_GENERAL1_LARGE. Please set `--compute-type BUILD_GENERAL1_LARGE`"
+        self.vpc_config = vpc_config
 
         if repository:
             self.repo_name, self.tag = repository.split(":", maxsplit=1)
@@ -78,6 +79,9 @@ class TempCodeBuildProject:
             },
             "serviceRole": f"arn:{partition}:iam::{account}:role/{self.role}",
         }
+
+        if self.vpc_config is not None:
+            args["vpcConfig"] = self.vpc_config
 
         client.create_project(**args)
         return self
