@@ -20,8 +20,9 @@ class TempCodeBuildProject:
         self.repo_name = None
         self.compute_type = compute_type or "BUILD_GENERAL1_SMALL"
         self.environment = environment or "LINUX_CONTAINER"
-        if self.environment=="LINUX_GPU_CONTAINER" and self.compute_type=="BUILD_GENERAL1_SMALL":
-            self.compute_type="BUILD_GENERAL1_LARGE"
+        if self.environment=="LINUX_GPU_CONTAINER":
+            assert self.compute_type=="BUILD_GENERAL1_LARGE", \
+                "LINUX_GPU_CONTAINER builds only available on BUILD_GENERAL1_LARGE. Please set `--compute-type BUILD_GENERAL1_LARGE`"
 
         if repository:
             self.repo_name, self.tag = repository.split(":", maxsplit=1)
