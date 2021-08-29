@@ -11,14 +11,18 @@ from sagemaker_studio_image_build.logs import logs_for_build
 
 
 class TempCodeBuildProject:
-    def __init__(self, s3_location, role, repository=None, compute_type=None, vpc_config=None):
+    def __init__(self, s3_location, role, repository=None, compute_type=None, vpc_config=None, environment=None):
         self.s3_location = s3_location
         self.role = role
 
         self.session = boto3.session.Session()
         self.domain_id, self.user_profile_name = self._get_studio_metadata()
         self.repo_name = None
-        self.compute_type = compute_type or "BUILD_GENERAL1_SMALL"
+        self.compute_type = compute_type
+        self.environment = environment
+        if self.environment=="LINUX_GPU_CONTAINER":
+            assert self.compute_type=="BUILD_GENERAL1_LARGE", \
+                "LINUX_GPU_CONTAINER builds only available on BUILD_GENERAL1_LARGE. Please set `--compute-type BUILD_GENERAL1_LARGE`"
         self.vpc_config = vpc_config
 
         if repository:
@@ -62,7 +66,7 @@ class TempCodeBuildProject:
             "source": {"type": "S3", "location": self.s3_location},
             "artifacts": {"type": "NO_ARTIFACTS"},
             "environment": {
-                "type": "LINUX_CONTAINER",
+                "type": self.environment,
                 "image": "aws/codebuild/standard:4.0",
                 "computeType": self.compute_type,
                 "environmentVariables": [
