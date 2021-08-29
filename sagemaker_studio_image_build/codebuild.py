@@ -18,8 +18,8 @@ class TempCodeBuildProject:
         self.session = boto3.session.Session()
         self.domain_id, self.user_profile_name = self._get_studio_metadata()
         self.repo_name = None
-        self.compute_type = compute_type or "BUILD_GENERAL1_SMALL"
-        self.environment = environment or "LINUX_CONTAINER"
+        self.compute_type = compute_type
+        self.environment = environment
         if self.environment=="LINUX_GPU_CONTAINER":
             assert self.compute_type=="BUILD_GENERAL1_LARGE", \
                 "LINUX_GPU_CONTAINER builds only available on BUILD_GENERAL1_LARGE. Please set `--compute-type BUILD_GENERAL1_LARGE`"
