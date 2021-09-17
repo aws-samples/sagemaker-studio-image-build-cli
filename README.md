@@ -28,6 +28,11 @@ These can be overridden with the relevant CLI options.
 sm-docker build . --repository mynewrepo:1.0 --role SampleDockerBuildRole --bucket sagemaker-us-east-1-326543455535 --vpc-id vpc-0c70e76ef1c603b94 --subnet-ids subnet-0d984f080338960bb,subnet-0ac3e96808c8092f2 --security-group-ids sg-0d31b4042f2902cd0
 ``` 
 
+Additional environment variables can be specified for the CodeBuild project with the `--env` argument. Use `--env` multiple times to specify more than one variable.
+```bash
+sm-docker build . --file /path/to/Dockerfile --env DOCKER_BUILDKIT=1
+```
+
 The CLI will take care of packaging the current directory and uploading to S3, creating a CodeBuild project, starting a build with the S3 artifacts, tailing the build logs, and uploading the built image to ECR.
 
 
