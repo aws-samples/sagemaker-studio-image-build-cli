@@ -72,8 +72,16 @@ def build_image(args, extra_args):
 
     builder.build_image(
         args.repository, get_role(args), args.bucket, args.compute_type, 
-        construct_vpc_config(args), extra_args, log=not args.no_logs
+        construct_vpc_config(args), extra_args, args.env, log=not args.no_logs
     )
+
+
+class AppendEnvAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        items = getattr(namespace, self.dest, None)
+        items = [] if items is None else items[:]
+        items.append(dict(zip(["name", "value"], values.split("=", 1))))
+        setattr(namespace, self.dest, items)
 
 
 def main():
@@ -118,6 +126,11 @@ def main():
     build_parser.add_argument(
         "--security-group-ids",
         help="The comma-separated list of security group ids for the CodeBuild Project (such as sg-0ce4ec0d0414d2ddc).",
+    )
+    build_parser.add_argument(
+        "--env",
+        action=AppendEnvAction,
+        help="An environment variable to set for the CodeBuild Project (such as DOCKER_BUILDKIT=1). Can be specified multiple times.",
     )
     build_parser.add_argument(
         "--no-logs",
